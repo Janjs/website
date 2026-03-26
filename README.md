@@ -29,8 +29,13 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Deploy to Coolify
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+This repo includes a GitHub Actions workflow at `.github/workflows/deploy-coolify.yml` that triggers a Coolify deploy webhook on every push to `main`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Set these GitHub repository secrets:
+
+- `COOLIFY_DEPLOY_HOOK`: your Coolify deploy webhook URL
+- `COOLIFY_DEPLOY_TOKEN` (optional): bearer token if your webhook requires auth
+
+After adding the secrets, push to `main` or run the workflow manually from the Actions tab.

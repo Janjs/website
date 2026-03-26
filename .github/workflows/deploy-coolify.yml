@@ -1,0 +1,31 @@
+name: Deploy to Coolify
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Coolify deployment webhook
+        env:
+          COOLIFY_DEPLOY_HOOK: ${{ secrets.COOLIFY_DEPLOY_HOOK }}
+          COOLIFY_DEPLOY_TOKEN: ${{ secrets.COOLIFY_DEPLOY_TOKEN }}
+        run: |
+          if [ -z "${COOLIFY_DEPLOY_HOOK}" ]; then
+            echo "Missing COOLIFY_DEPLOY_HOOK secret"
+            exit 1
+          fi
+
+          if [ -n "${COOLIFY_DEPLOY_TOKEN}" ]; then
+            curl --fail --silent --show-error \
+              -X POST \
+              -H "Authorization: Bearer ${COOLIFY_DEPLOY_TOKEN}" \
+              "${COOLIFY_DEPLOY_HOOK}"
+          else
+            curl --fail --silent --show-error -X POST "${COOLIFY_DEPLOY_HOOK}"
+          fi
+
