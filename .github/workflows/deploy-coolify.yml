@@ -9,6 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: prod
     steps:
       - name: Trigger Coolify deployment webhook
         env:
@@ -28,4 +29,3 @@ jobs:
           else
             curl --fail --silent --show-error -X POST "${COOLIFY_DEPLOY_HOOK}"
           fi
-
