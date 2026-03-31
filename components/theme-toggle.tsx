@@ -11,16 +11,15 @@ export function ThemeToggle() {
   return (
     <Button
       variant="outline"
-      size="sm"
+      size="icon-sm"
       onClick={() => {
         const isDark = document.documentElement.classList.contains("dark");
         setTheme(isDark ? "light" : "dark");
       }}
       aria-label="Toggle dark mode"
     >
-      <Sun className="hidden dark:block" />
-      <Moon className="dark:hidden" />
-      Toggle theme
+      <Sun className="hidden size-4 dark:block" />
+      <Moon className="size-4 dark:hidden" />
     </Button>
   );
 }

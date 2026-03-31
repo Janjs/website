@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { JanPronunciation } from "@/components/jan-pronunciation";
 
 type Project = {
   name: string;
@@ -114,27 +115,27 @@ export default async function Home() {
   const projects = await getPinnedProjects();
 
   const renderProjects = (projectList: Project[]) => (
-    <div className="space-y-4">
+    <div className="space-y-2.5">
       {projectList.map((project, index) => (
         <Card key={project.url}>
-          <CardHeader className="space-y-2">
+          <CardHeader className="space-y-1.5">
             <div className="flex items-center justify-between gap-3">
-              <CardTitle className="text-base font-medium">{project.name}</CardTitle>
+              <CardTitle className="text-sm font-medium sm:text-base">{project.name}</CardTitle>
               <div className="flex items-center gap-2">
                 {index < 3 ? <Badge>Active</Badge> : null}
                 <Badge variant="secondary">Link</Badge>
               </div>
             </div>
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-xs leading-snug text-muted-foreground sm:text-sm">
               {project.description}
             </p>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-0">
             <a
               href={project.url}
               target="_blank"
               rel="noreferrer"
-              className="text-sm text-muted-foreground"
+              className="text-xs text-muted-foreground sm:text-sm"
             >
               {project.url}
             </a>
@@ -145,44 +146,46 @@ export default async function Home() {
   );
 
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col px-6 py-14 sm:px-8 sm:py-20">
-      <div className="mb-10 flex justify-end">
+    <>
+      <div className="fixed top-4 right-4 z-50 sm:top-6 sm:right-6">
         <ThemeToggle />
       </div>
 
-      <section className="max-w-3xl space-y-5">
-        <p className="text-2xl leading-relaxed sm:text-3xl">
-          Hi, I&apos;m Jan.
-        </p>
-        <p className="text-2xl leading-relaxed sm:text-3xl">
-          Software engineer building artificial intelligence and spatial computing
-          experiences.
-        </p>
-      </section>
+      <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 py-10 sm:px-8 sm:py-14">
+        <section className="max-w-2xl space-y-3">
+          <p className="text-xl leading-tight sm:text-2xl">
+            Hi, I&apos;m <JanPronunciation />.
+          </p>
+          <p className="text-xl leading-tight sm:text-2xl">
+            Software engineer building artificial intelligence and spatial computing
+            experiences.
+          </p>
+        </section>
 
-      <Separator className="my-14" />
+        <Separator className="my-9" />
 
-      <section className="grid gap-10 md:grid-cols-2 md:gap-14">
-        <div className="space-y-4">
-          {resumeItems.map((item) => (
-            <p key={item} className="leading-relaxed">
-              {item}
-            </p>
-          ))}
-        </div>
+        <section className="grid gap-6 md:grid-cols-2 md:gap-8">
+          <div className="space-y-2.5">
+            {resumeItems.map((item) => (
+              <p key={item} className="text-sm leading-snug">
+                {item}
+              </p>
+            ))}
+          </div>
 
-        <div className="space-y-4">
-          {highlights.map((item) => (
-            <p key={item} className="leading-relaxed text-muted-foreground">
-              {item}
-            </p>
-          ))}
-        </div>
-      </section>
+          <div className="space-y-2.5">
+            {highlights.map((item) => (
+              <p key={item} className="text-sm leading-snug text-muted-foreground">
+                {item}
+              </p>
+            ))}
+          </div>
+        </section>
 
-      <Separator className="my-14" />
+        <Separator className="my-9" />
 
-      <section>{renderProjects(projects)}</section>
-    </main>
+        <section>{renderProjects(projects)}</section>
+      </main>
+    </>
   );
 }
