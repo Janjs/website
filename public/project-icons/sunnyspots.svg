@@ -1,0 +1,24 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sunny-bg" x1="32" y1="24" x2="220" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FDF4B7"/>
+      <stop offset="1" stop-color="#F7B34D"/>
+    </linearGradient>
+    <radialGradient id="sunny-core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(128 128) rotate(90) scale(82)">
+      <stop stop-color="#FFEBA6"/>
+      <stop offset="1" stop-color="#F5953A"/>
+    </radialGradient>
+  </defs>
+  <rect x="12" y="12" width="232" height="232" rx="56" fill="url(#sunny-bg)"/>
+  <g stroke="#D46C1F" stroke-width="12" stroke-linecap="round">
+    <path d="M128 36V58"/>
+    <path d="M128 198V220"/>
+    <path d="M36 128H58"/>
+    <path d="M198 128H220"/>
+    <path d="M62.8 62.8L78.3 78.3"/>
+    <path d="M177.7 177.7L193.2 193.2"/>
+    <path d="M62.8 193.2L78.3 177.7"/>
+    <path d="M177.7 78.3L193.2 62.8"/>
+  </g>
+  <circle cx="128" cy="128" r="54" fill="url(#sunny-core)" stroke="#E07E22" stroke-width="10"/>
+</svg>
