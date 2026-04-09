@@ -321,7 +321,7 @@ export default async function Home() {
         <section className="max-w-2xl space-y-3">
           <p className="text-xl leading-tight sm:text-2xl">
             <span className="inline-flex items-center gap-2">
-              <EncryptedText text="Hi, I'm Jan." />
+              <EncryptedText text="Hi, I'm Jan." revealDelayMs={120} />
               <JanPronunciation showName={false} />
             </span>
           </p>
