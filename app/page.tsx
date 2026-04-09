@@ -1,10 +1,12 @@
 import { Separator } from "@/components/ui/separator";
 import { EncryptedText } from "@/components/ui/encrypted-text";
+import { Highlighter } from "@/components/ui/highlighter";
 import { LiveProjectButton } from "@/components/live-project-button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { JanPronunciation } from "@/components/jan-pronunciation";
 import { Laptop, Smartphone, Star } from "lucide-react";
 import Image from "next/image";
+import type { ReactNode } from "react";
 
 type ProjectKind = "web" | "mobile" | "mcp";
 
@@ -84,11 +86,41 @@ const portfolioProjects: Project[] = [
   },
 ];
 
-const resumeItems = [
-  "BSc Computer Engineering - UPF Barcelona",
-  "AI video analytics internship: people counting systems at local startup",
-  "MSc Computer Science (AR/VR) - Trinity College Dublin",
-  "4 years consulting building AI web apps at Dutch Bank, US Medtech, and German Industrial Machinery",
+type AboutItem = {
+  id: string;
+  content: ReactNode;
+};
+
+const resumeItems: AboutItem[] = [
+  {
+    id: "upf",
+    content: (
+      <>
+        BSc Computer Engineering - UPF Barcelona <span aria-hidden="true">🇪🇸</span>
+      </>
+    ),
+  },
+  {
+    id: "internship",
+    content: "AI video analytics internship: people counting systems at local startup",
+  },
+  {
+    id: "trinity",
+    content: (
+      <>
+        MSc Computer Science (AR/VR) - Trinity College Dublin <span aria-hidden="true">🇮🇪</span>
+      </>
+    ),
+  },
+  {
+    id: "consulting",
+    content: (
+      <>
+        4+ years consulting building AI web apps at Dutch Bank <span aria-hidden="true">🇳🇱</span>, US Medtech{" "}
+        <span aria-hidden="true">🇺🇸</span>, and German Industrial Machinery <span aria-hidden="true">🇩🇪</span>
+      </>
+    ),
+  },
 ];
 
 const highlights = [
@@ -293,19 +325,16 @@ export default async function Home() {
               <JanPronunciation showName={false} />
             </span>
           </p>
-          <p className="text-xl leading-tight sm:text-2xl">
-            Software engineer building artificial intelligence and spatial computing
+          <p className="pr-16 text-xl leading-tight sm:pr-0 sm:text-2xl">
+            Software engineer building{" "}
+            <Highlighter action="underline" color="#9fc5ff">
+              artificial intelligence
+            </Highlighter>{" "}
+            and{" "}
+            <Highlighter action="underline" color="#a7f3d0">
+              spacial computing
+            </Highlighter>{" "}
             experiences.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            <a
-              href="https://www.linkedin.com/in/janjimenezserra/"
-              target="_blank"
-              rel="noreferrer"
-              className="underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
-            >
-              connect with me
-            </a>
           </p>
         </section>
 
@@ -316,8 +345,8 @@ export default async function Home() {
           <div className="grid gap-6 md:grid-cols-2 md:gap-8">
           <div className="space-y-2.5">
             {resumeItems.map((item) => (
-              <p key={item} className="text-sm leading-snug">
-                {item}
+              <p key={item.id} className="text-sm leading-snug">
+                {item.content}
               </p>
             ))}
           </div>
