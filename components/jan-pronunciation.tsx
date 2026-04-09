@@ -66,10 +66,14 @@ function playJanPronunciation() {
   });
 }
 
-export function JanPronunciation() {
+type JanPronunciationProps = {
+  showName?: boolean;
+};
+
+export function JanPronunciation({ showName = true }: JanPronunciationProps) {
   return (
     <span className="inline-flex items-center gap-1.5 align-baseline">
-      <span>Jan</span>
+      {showName ? <span>Jan</span> : null}
       <Tooltip>
         <TooltipTrigger
           aria-label="Play pronunciation for Jan"

@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { EncryptedText } from "@/components/ui/encrypted-text";
 import { LiveProjectButton } from "@/components/live-project-button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { JanPronunciation } from "@/components/jan-pronunciation";
 import { Laptop, Smartphone, Star } from "lucide-react";
 import Image from "next/image";
 
@@ -287,7 +288,10 @@ export default async function Home() {
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 py-10 sm:px-8 sm:py-14">
         <section className="max-w-2xl space-y-3">
           <p className="text-xl leading-tight sm:text-2xl">
-            <EncryptedText text="Hi, I'm Jan." />
+            <span className="inline-flex items-center gap-2">
+              <EncryptedText text="Hi, I'm Jan." />
+              <JanPronunciation showName={false} />
+            </span>
           </p>
           <p className="text-xl leading-tight sm:text-2xl">
             Software engineer building artificial intelligence and spatial computing
