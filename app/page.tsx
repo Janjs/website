@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
+import { EncryptedText } from "@/components/ui/encrypted-text";
+import { LiveProjectButton } from "@/components/live-project-button";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { JanPronunciation } from "@/components/jan-pronunciation";
 import { Laptop, Smartphone, Star } from "lucide-react";
 import Image from "next/image";
 
@@ -12,6 +13,7 @@ type Project = {
   liveUrl: string | null;
   iconSrc?: string;
   iconText?: string;
+  darkIconText?: string;
   github: string;
   kind: ProjectKind;
   iconWrapperClass?: string;
@@ -55,8 +57,9 @@ const portfolioProjects: Project[] = [
     tag: "Find sun in your city",
     liveUrl: "https://sunnyspots.vercel.app",
     iconText: "☀️",
+    darkIconText: "🌙",
     iconWrapperClass:
-      "bg-linear-to-br from-white via-[#fffaf0] to-[#ffb63a]/12 dark:from-[#5c3d0f] dark:via-[#744d14] dark:to-[#ffb63a]/35",
+      "bg-linear-to-br from-white via-[#fffaf0] to-[#ffb63a]/12 dark:from-[#0f1f3d] dark:via-[#162a4f] dark:to-[#264a87]/45",
     github: "sunnyspots",
     kind: "web",
   },
@@ -103,8 +106,8 @@ export default async function Home() {
   const githubChipClass =
     "border border-[#c6c6c6] bg-[#ececec] text-foreground transition-colors hover:bg-[#dfdfdf] dark:border-[#4e4e4e] dark:bg-[#2a2a2a] dark:hover:bg-[#333333]";
   const starsChipClass = "border-[#d0ab2a] bg-[#f5cf49] text-[#5f4300] dark:border-[#c7a633] dark:bg-[#6b5713] dark:text-[#f3e2a5]";
-  const liveChipClass = "border-[#a9c790] bg-[#d9e8cf] text-[#2f6a18] dark:border-[#4f7a3c] dark:bg-[#1f3920] dark:text-[#9ed18f]";
-  const liveDotClass = "bg-[#2f6a18] dark:bg-[#73bb5b]";
+  const liveChipClass =
+    "border-[#a9c790] bg-[#d9e8cf] text-[#2f6a18] hover:bg-[#cfe1c2] dark:border-[#4f7a3c] dark:bg-[#1f3920] dark:text-[#9ed18f] dark:hover:bg-[#274828]";
   const platformLabel = (kind: ProjectKind) =>
     kind === "mcp" ? "Model Context Protocol Server" : kind === "mobile" ? "Mobile App" : "Web App";
 
@@ -112,10 +115,7 @@ export default async function Home() {
     <div className="w-full">
       {projectList.map((project, index) => (
         <div key={project.github}>
-          <div
-            className="relative py-3 transition-colors hover:bg-accent/20 sm:py-4 fade-up-in"
-            style={{ animationDelay: `${380 + index * 70}ms` }}
-          >
+          <div className="relative py-3 transition-colors hover:bg-accent/20 sm:py-4">
             <a
               href={project.liveUrl ?? `https://github.com/Janjs/${project.github}`}
               target="_blank"
@@ -129,10 +129,17 @@ export default async function Home() {
               >
                 {project.iconText ? (
                   <span
-                    className="flex h-full w-full items-center justify-center text-xl sm:text-2xl"
+                    className="flex h-full w-full items-center justify-center text-lg sm:text-xl"
                     aria-hidden="true"
                   >
-                    {project.iconText}
+                    {project.darkIconText ? (
+                      <>
+                        <span className="dark:hidden">{project.iconText}</span>
+                        <span className="hidden dark:inline">{project.darkIconText}</span>
+                      </>
+                    ) : (
+                      project.iconText
+                    )}
                   </span>
                 ) : (
                   <Image
@@ -201,10 +208,10 @@ export default async function Home() {
                   </span>
                 ) : null}
                 {project.liveUrl ? (
-                  <span className={`${chipBaseClass} ${liveChipClass}`}>
-                    <span className={`mr-1.5 inline-block h-3 w-3 rounded-full ${liveDotClass}`} />
-                    Live
-                  </span>
+                  <LiveProjectButton
+                    href={project.liveUrl}
+                    className={`pointer-events-auto h-8 px-3 text-sm font-medium ${liveChipClass}`}
+                  />
                 ) : null}
               </div>
 
@@ -256,10 +263,10 @@ export default async function Home() {
                   </span>
                 ) : null}
                 {project.liveUrl ? (
-                  <span className={`inline-flex h-7 items-center rounded-full border px-2.5 text-xs leading-none whitespace-nowrap ${liveChipClass}`}>
-                    <span className={`mr-1 inline-block h-2.5 w-2.5 rounded-full ${liveDotClass}`} />
-                    Live
-                  </span>
+                  <LiveProjectButton
+                    href={project.liveUrl}
+                    className={`pointer-events-auto h-7 px-2.5 text-xs font-medium ${liveChipClass}`}
+                  />
                 ) : null}
               </div>
             </div>
@@ -273,23 +280,14 @@ export default async function Home() {
 
   return (
     <>
-      <div className="fixed top-4 right-4 z-50 fade-up-in sm:top-6 sm:right-6">
+      <div className="fixed top-4 right-4 z-50 sm:top-6 sm:right-6">
         <ThemeToggle />
       </div>
 
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col px-6 py-10 sm:px-8 sm:py-14">
-        <section className="max-w-2xl space-y-3 fade-up-in fade-up-delay-1">
+        <section className="max-w-2xl space-y-3">
           <p className="text-xl leading-tight sm:text-2xl">
-            Hi, I&apos;m{" "}
-            <a
-              href="https://www.linkedin.com/in/janjimenezserra/"
-              target="_blank"
-              rel="noreferrer"
-              className="underline decoration-border underline-offset-4 transition-colors hover:text-muted-foreground"
-            >
-              <JanPronunciation />
-            </a>
-            .
+            <EncryptedText text="Hi, I'm Jan." />
           </p>
           <p className="text-xl leading-tight sm:text-2xl">
             Software engineer building artificial intelligence and spatial computing
@@ -307,7 +305,7 @@ export default async function Home() {
           </p>
         </section>
 
-        <Separator className="my-9 fade-up-in fade-up-delay-2" />
+        <Separator className="my-9" />
 
         <section className="space-y-3 fade-up-in fade-up-delay-2">
           <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">About me</h2>
@@ -330,7 +328,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <Separator className="my-9 fade-up-in fade-up-delay-3" />
+        <Separator className="my-9" />
 
         <section className="space-y-3 fade-up-in fade-up-delay-3">
           <h2 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">Projects</h2>

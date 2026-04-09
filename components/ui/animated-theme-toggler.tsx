@@ -16,9 +16,8 @@ export const AnimatedThemeToggler = ({
   duration = 400,
   ...props
 }: AnimatedThemeTogglerProps) => {
-  const { resolvedTheme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const isDark = resolvedTheme === "dark"
 
   const toggleTheme = useCallback(() => {
     const button = buttonRef.current
@@ -34,7 +33,8 @@ export const AnimatedThemeToggler = ({
       Math.max(y, viewportHeight - y)
     )
 
-    const nextTheme = isDark ? "light" : "dark"
+    const currentlyDark = document.documentElement.classList.contains("dark")
+    const nextTheme = currentlyDark ? "light" : "dark"
     const applyTheme = () => {
       // Keep next-themes and the root class in sync during the transition frame.
       setTheme(nextTheme)
@@ -69,7 +69,7 @@ export const AnimatedThemeToggler = ({
         )
       })
     }
-  }, [isDark, duration, setTheme])
+  }, [duration, setTheme])
 
   return (
     <button
@@ -79,7 +79,8 @@ export const AnimatedThemeToggler = ({
       className={cn(className)}
       {...props}
     >
-      {isDark ? <Sun /> : <Moon />}
+      <Sun className="hidden dark:block" />
+      <Moon className="dark:hidden" />
       <span className="sr-only">Toggle theme</span>
     </button>
   )
