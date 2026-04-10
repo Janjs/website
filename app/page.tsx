@@ -56,7 +56,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="fixed top-4 right-[calc(1rem-var(--scrollbar-compensation,0px))] z-50 sm:top-6 sm:right-[calc(1.5rem-var(--scrollbar-compensation,0px))]">
+      <div className="fixed top-4 right-[calc(1rem+var(--scrollbar-compensation,0px))] z-50 sm:top-6 sm:right-[calc(1.5rem+var(--scrollbar-compensation,0px))]">
         <ThemeToggle />
       </div>
 
