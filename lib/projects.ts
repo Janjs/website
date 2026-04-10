@@ -71,7 +71,7 @@ export const portfolioProjects: Project[] = [
       "bg-linear-to-br from-white via-[#fffaf0] to-[#ffb63a]/12 dark:from-[#0f1f3d] dark:via-[#162a4f] dark:to-[#264a87]/45",
     github: "sunnyspots",
     kind: "web",
-    screenshotSrc: "/project-screenshots/sunny-spots.png",
+    screenshotSrc: "/project-screenshots/sunny-spots.jpeg",
     description: "Map-based app to discover when parks, cafes, and city spots receive sunlight during the day.",
     chips: ["Web App", "Maps", "Urban"],
     techStack: ["Next.js", "TypeScript", "Mapping APIs"],
@@ -85,7 +85,7 @@ export const portfolioProjects: Project[] = [
     kind: "web",
     iconWrapperClass:
       "bg-linear-to-br from-white via-[#fff8ef] to-[#ffb267]/12 p-0.5 dark:from-[#4d2c17] dark:via-[#63381d] dark:to-[#ffb267]/35",
-    screenshotSrc: "/project-screenshots/highlights-ai.png",
+    screenshotSrc: "/project-screenshots/highlights-ai.jpeg",
     description: "Create basketball highlight reels by combining computer vision detections with scene-aware editing.",
     chips: ["Web App", "Sports", "Computer Vision"],
     techStack: ["Next.js", "Python", "Roboflow"],

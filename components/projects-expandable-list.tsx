@@ -25,6 +25,7 @@ function GithubMark({ className }: { className: string }) {
 export function ProjectsExpandableList({ projects }: ProjectsExpandableListProps) {
   const [active, setActive] = useState<Project | null>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const preloadedScreenshotUrls = useRef<Set<string>>(new Set());
 
   const chipBaseClass =
     "inline-flex h-8 items-center rounded-full border px-3 text-sm leading-none whitespace-nowrap";
@@ -61,6 +62,46 @@ export function ProjectsExpandableList({ projects }: ProjectsExpandableListProps
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [active]);
+
+  useEffect(() => {
+    const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+
+    if (connection?.saveData || connection?.effectiveType === "2g") {
+      return;
+    }
+
+    const screenshotSources = projects.flatMap((project) => (project.screenshotSrc ? [project.screenshotSrc] : []));
+    if (!screenshotSources.length) {
+      return;
+    }
+
+    const buildOptimizedImageUrl = (src: string, width: number, quality: number) =>
+      `/_next/image?url=${encodeURIComponent(src)}&w=${width}&q=${quality}`;
+
+    const preloadScreenshots = () => {
+      screenshotSources.forEach((src) => {
+        [828, 1200].forEach((width) => {
+          const optimizedUrl = buildOptimizedImageUrl(src, width, 60);
+          if (preloadedScreenshotUrls.current.has(optimizedUrl)) {
+            return;
+          }
+
+          const img = new window.Image();
+          img.decoding = "async";
+          img.src = optimizedUrl;
+          preloadedScreenshotUrls.current.add(optimizedUrl);
+        });
+      });
+    };
+
+    if ("requestIdleCallback" in window) {
+      const idleCallbackId = window.requestIdleCallback(preloadScreenshots, { timeout: 2000 });
+      return () => window.cancelIdleCallback(idleCallbackId);
+    }
+
+    const timeoutId = window.setTimeout(preloadScreenshots, 600);
+    return () => window.clearTimeout(timeoutId);
+  }, [projects]);
 
   const platformLabel = (kind: ProjectKind) =>
     kind === "mcp" ? "Model Context Protocol Server" : kind === "mobile" ? "Mobile App" : "Web App";
@@ -219,6 +260,9 @@ export function ProjectsExpandableList({ projects }: ProjectsExpandableListProps
                                   alt={`${active.name} screenshot`}
                                   width={1200}
                                   height={675}
+                                  quality={60}
+                                  sizes="(max-width: 768px) 100vw, 768px"
+                                  loading="eager"
                                   className="h-auto w-full object-cover"
                                 />
                               </motion.div>
