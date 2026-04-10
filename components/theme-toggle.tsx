@@ -5,20 +5,22 @@ import { buttonVariants } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 
 export function ThemeToggle() {
+  const iconButtonClass = buttonVariants({ variant: "ghost", size: "icon-lg" });
+
   return (
     <ButtonGroup
       orientation="vertical"
       className="overflow-hidden rounded-[min(var(--radius-md),12px)] border border-border bg-background shadow-xs [&>*]:rounded-none [&>*]:border-0 [&>*]:shadow-none [&>*]:focus-visible:z-10 [&>*:not(:last-child)]:border-b [&>*:not(:last-child)]:border-border"
     >
       <AnimatedThemeToggler
-        className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+        className={iconButtonClass}
         aria-label="Toggle dark mode"
       />
       <a
         href="https://github.com/Janjs"
         target="_blank"
         rel="noreferrer"
-        className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+        className={iconButtonClass}
         aria-label="Open GitHub profile"
       >
         <svg
@@ -35,7 +37,7 @@ export function ThemeToggle() {
         href="https://www.linkedin.com/in/janjimenezserra/"
         target="_blank"
         rel="noreferrer"
-        className={buttonVariants({ variant: "ghost", size: "icon-sm" })}
+        className={iconButtonClass}
         aria-label="Open LinkedIn profile"
       >
         <svg
