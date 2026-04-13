@@ -17,49 +17,61 @@ const aboutItems: AboutGlobeItem[] = [
     quote:
       "Barcelona is where I'm originally from. UPF gave me the systems foundation that still shapes how I approach product engineering, architecture, and performance.",
     location: [41.3874, 2.1686],
-    label: "Barcelona, Spain",
+    place: "Barcelona",
+    country: "Spain",
+    flag: "🇪🇸",
   },
   {
     id: "internship",
     quote:
       "That internship was where computer vision stopped being academic and became something practical, measurable, and deployed.",
     location: [41.3851, 2.1734],
-    label: "Barcelona, Spain",
+    place: "Barcelona",
+    country: "Spain",
+    flag: "🇪🇸",
   },
   {
     id: "trinity",
     quote:
       "Studying at Trinity pulled me deep into spatial computing and AR/VR, with mentors and professors connected to the top of the industry shaping how I think about interaction design.",
     location: [53.3498, -6.2603],
-    label: "Dublin, Ireland",
+    place: "Dublin",
+    country: "Ireland",
+    flag: "🇮🇪",
   },
   {
     id: "dutch-bank",
     quote:
       "The Dutch bank work had me designing and building high-availability backend systems handling 1,000+ QPS across Kotlin, Java, and Azure.",
     location: [52.3676, 4.9041],
-    label: "Amsterdam, Netherlands",
+    place: "Amsterdam",
+    country: "Netherlands",
+    flag: "🇳🇱",
   },
   {
     id: "us-medtech",
     quote:
       "The Michigan medtech work centered on building AI chatbot platforms with Next.js, used by 50,000+ internal employees.",
     location: [44.3148, -85.6024],
-    label: "Michigan, United States",
+    place: "Michigan",
+    country: "United States",
+    flag: "🇺🇸",
   },
   {
     id: "german-machinery",
     quote:
       "The German industrial work focused on developing Next.js-based agentic systems with LLMs, RAG, and enterprise integrations.",
     location: [50.1109, 8.6821],
-    label: "Frankfurt, Germany",
+    place: "Frankfurt",
+    country: "Germany",
+    flag: "🇩🇪",
   },
 ];
 
 const aboutEntries: AboutGlobeEntry[] = [
   {
     id: "upf",
-    parts: [{ text: "BSc Computer Engineering - UPF Barcelona 🇪🇸", itemId: "upf" }],
+    parts: [{ text: "BSc Computer Engineering - UPF Barcelona", itemId: "upf" }],
   },
   {
     id: "internship",
@@ -74,7 +86,7 @@ const aboutEntries: AboutGlobeEntry[] = [
     id: "trinity",
     parts: [
       {
-        text: "MSc Computer Science (AR/VR) - Trinity College Dublin 🇮🇪",
+        text: "MSc Computer Science (AR/VR) - Trinity College Dublin",
         itemId: "trinity",
       },
     ],
@@ -83,11 +95,11 @@ const aboutEntries: AboutGlobeEntry[] = [
     id: "consulting",
     parts: [
       { text: "4+ years consulting building AI web apps at " },
-      { text: "Dutch Bank 🇳🇱", itemId: "dutch-bank", className: "font-semibold" },
+      { text: "Dutch Bank", itemId: "dutch-bank", className: "font-semibold" },
       { text: ", " },
-      { text: "US Medtech 🇺🇸", itemId: "us-medtech", className: "font-semibold" },
+      { text: "US Medtech", itemId: "us-medtech", className: "font-semibold" },
       { text: ", and " },
-      { text: "German Industrial Machinery 🇩🇪", itemId: "german-machinery", className: "font-semibold" },
+      { text: "German Industrial Machinery", itemId: "german-machinery", className: "font-semibold" },
     ],
   },
 ];

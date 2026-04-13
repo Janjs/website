@@ -1,14 +1,24 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import createGlobe, { type COBEOptions, type Marker } from "cobe";
 
 import { cn } from "@/lib/utils";
 
+export type GlobeLocation = {
+  id: string;
+  location: [number, number];
+  place: string;
+  country: string;
+  flag: string;
+};
+
 type GlobeProps = {
   className?: string;
-  location: [number, number];
-  label?: string;
+  locations: GlobeLocation[];
+  focusedLocation: [number, number];
+  selectedLocationId?: string;
+  onLocationSelect?: (locationId: string) => void;
 };
 
 const BASE_CONFIG: Omit<
@@ -27,10 +37,27 @@ const BASE_CONFIG: Omit<
 
 const INTERPOLATION_FACTOR = 0.12;
 const DRAG_SENSITIVITY = 0.005;
+const MARKER_ELEVATION = 0;
+const GLOBE_MARKER_RADIUS = 0.8 + MARKER_ELEVATION;
 const FOCUS_BIAS = {
   phi: (-20 * Math.PI) / 180,
   theta: (-20 * Math.PI) / 180,
 } as const;
+const LABEL_CHIP_CLASS =
+  "inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-background px-2.5 text-xs leading-none whitespace-nowrap text-muted-foreground shadow-sm";
+const LABEL_LINE_CLASS = "bg-[rgb(239,68,68)]";
+
+function getMarkerKey(location: Pick<GlobeLocation, "place" | "country">) {
+  return `${location.place}::${location.country}`;
+}
+
+function uniqueByMarkerKey(locations: GlobeLocation[]) {
+  return locations.filter((item, index, allLocations) => {
+    const markerKey = getMarkerKey(item);
+
+    return index === allLocations.findIndex((candidate) => getMarkerKey(candidate) === markerKey);
+  });
+}
 
 function locationToAngles([latitude, longitude]: [number, number]) {
   return {
@@ -50,12 +77,53 @@ function interpolateAngle(from: number, to: number, amount: number) {
   return from + shortestDelta * amount;
 }
 
-export function Globe({ className, location, label }: GlobeProps) {
+function locationToVector([latitude, longitude]: [number, number]) {
+  const latitudeRadians = (latitude * Math.PI) / 180;
+  const longitudeRadians = (longitude * Math.PI) / 180 - Math.PI;
+  const radius = Math.cos(latitudeRadians);
+
+  return [
+    -radius * Math.cos(longitudeRadians),
+    Math.sin(latitudeRadians),
+    radius * Math.sin(longitudeRadians),
+  ] as const;
+}
+
+function projectLocation(location: [number, number], phi: number, theta: number) {
+  const [rawX, rawY, rawZ] = locationToVector(location);
+  const x = rawX * GLOBE_MARKER_RADIUS;
+  const y = rawY * GLOBE_MARKER_RADIUS;
+  const z = rawZ * GLOBE_MARKER_RADIUS;
+  const cosTheta = Math.cos(theta);
+  const cosPhi = Math.cos(phi);
+  const sinTheta = Math.sin(theta);
+  const sinPhi = Math.sin(phi);
+  const projectedX = cosPhi * x + sinPhi * z;
+  const projectedY = sinPhi * sinTheta * x + cosTheta * y - cosPhi * sinTheta * z;
+  const isVisible = -sinPhi * cosTheta * x + sinTheta * y + cosPhi * cosTheta * z >= 0;
+
+  return {
+    x: (projectedX + 1) / 2,
+    y: (-projectedY + 1) / 2,
+    isVisible,
+  };
+}
+
+export function Globe({
+  className,
+  locations,
+  focusedLocation,
+  selectedLocationId,
+  onLocationSelect,
+}: GlobeProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const markerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const widthRef = useRef(0);
-  const markerLocationRef = useRef(location);
-  const targetRotationRef = useRef(locationToAngles(location));
-  const currentRotationRef = useRef(locationToAngles(location));
+  const locationsRef = useRef(locations);
+  const selectedLocationIdRef = useRef(selectedLocationId);
+  const hoveredMarkerKeyRef = useRef<string | null>(null);
+  const targetRotationRef = useRef(locationToAngles(focusedLocation));
+  const currentRotationRef = useRef(locationToAngles(focusedLocation));
   const dragStateRef = useRef<{
     pointerId: number;
     startX: number;
@@ -64,11 +132,23 @@ export function Globe({ className, location, label }: GlobeProps) {
     startTheta: number;
   } | null>(null);
   const timeRef = useRef(0);
+  const [, setHoveredMarkerKey] = useState<string | null>(null);
 
   useEffect(() => {
-    markerLocationRef.current = location;
-    targetRotationRef.current = locationToAngles(location);
-  }, [location]);
+    locationsRef.current = locations;
+  }, [locations]);
+
+  useEffect(() => {
+    targetRotationRef.current = locationToAngles(focusedLocation);
+  }, [focusedLocation]);
+
+  useEffect(() => {
+    selectedLocationIdRef.current = selectedLocationId;
+  }, [selectedLocationId]);
+
+  const uniqueLocations = uniqueByMarkerKey(locations);
+  const selectedLocation = locations.find((item) => item.id === selectedLocationId);
+  const selectedMarkerKey = selectedLocation ? getMarkerKey(selectedLocation) : undefined;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -91,6 +171,7 @@ export function Globe({ className, location, label }: GlobeProps) {
       phi: currentRotationRef.current.phi,
       theta: currentRotationRef.current.theta,
       markers: [],
+      markerElevation: MARKER_ELEVATION,
       devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2),
     });
 
@@ -111,15 +192,26 @@ export function Globe({ className, location, label }: GlobeProps) {
       );
       timeRef.current += 0.04;
 
-      const dot = 0.038 + ((Math.sin(timeRef.current) + 1) / 2) * 0.004;
+      const selectedItem = locationsRef.current.find(
+        (item) => item.id === selectedLocationIdRef.current
+      );
+      const currentSelectedMarkerKey = selectedItem ? getMarkerKey(selectedItem) : undefined;
+      const markers: Marker[] = uniqueByMarkerKey(locationsRef.current).map((item) => {
+        const markerKey = getMarkerKey(item);
+        const isSelected = markerKey === currentSelectedMarkerKey;
+        const isHovered = markerKey === hoveredMarkerKeyRef.current;
+        const pulse = (Math.sin(timeRef.current + item.location[0]) + 1) / 2;
+        const emphasis = isSelected ? 1 : isHovered ? 0.6 : 0;
+        const size = 0.026 + pulse * 0.003 + emphasis * (0.02 + pulse * 0.001);
 
-      const markers: Marker[] = [
-        {
-          location: markerLocationRef.current,
-          size: dot,
-          color: [239 / 255, 68 / 255, 68 / 255],
-        },
-      ];
+        return {
+          location: item.location,
+          size,
+          color: isSelected || isHovered
+            ? [239 / 255, 68 / 255, 68 / 255]
+            : [15 / 255, 23 / 255, 42 / 255],
+        };
+      });
 
       globe.update({
         phi: currentRotationRef.current.phi,
@@ -128,6 +220,25 @@ export function Globe({ className, location, label }: GlobeProps) {
         height: widthRef.current * 2,
         markers,
       });
+
+      for (const item of uniqueByMarkerKey(locationsRef.current)) {
+        const markerElement = markerRefs.current[getMarkerKey(item)];
+
+        if (!markerElement) {
+          continue;
+        }
+
+        const projected = projectLocation(
+          item.location,
+          currentRotationRef.current.phi,
+          currentRotationRef.current.theta
+        );
+
+        markerElement.style.left = `${projected.x * 100}%`;
+        markerElement.style.top = `${projected.y * 100}%`;
+        markerElement.style.opacity = projected.isVisible ? "1" : "0";
+        markerElement.style.pointerEvents = projected.isVisible ? "auto" : "none";
+      }
 
       frameId = window.requestAnimationFrame(render);
     };
@@ -191,13 +302,82 @@ export function Globe({ className, location, label }: GlobeProps) {
     <div className={cn("absolute inset-0", className)}>
       <canvas
         ref={canvasRef}
-        aria-label={label ? `Animated globe focused on ${label}` : "Animated globe"}
+        aria-label="Animated globe with selectable locations"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
         className="size-full cursor-grab touch-none opacity-0 transition-opacity duration-700 active:cursor-grabbing [contain:layout_paint_size]"
       />
+      <div className="pointer-events-none absolute inset-0 z-10">
+        {uniqueLocations.map((item) => {
+          const isSelected = getMarkerKey(item) === selectedMarkerKey;
+
+          return (
+            <button
+              key={getMarkerKey(item)}
+              ref={(node) => {
+                markerRefs.current[getMarkerKey(item)] = node;
+              }}
+              type="button"
+              className="pointer-events-auto absolute left-0 top-0 size-10 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full focus-visible:outline-none"
+              onMouseEnter={() => {
+                const markerKey = getMarkerKey(item);
+                hoveredMarkerKeyRef.current = markerKey;
+                setHoveredMarkerKey(markerKey);
+              }}
+              onMouseLeave={() => {
+                hoveredMarkerKeyRef.current = null;
+                setHoveredMarkerKey(null);
+              }}
+              onFocus={() => {
+                const markerKey = getMarkerKey(item);
+                hoveredMarkerKeyRef.current = markerKey;
+                setHoveredMarkerKey(markerKey);
+              }}
+              onBlur={() => {
+                hoveredMarkerKeyRef.current = null;
+                setHoveredMarkerKey(null);
+              }}
+              onClick={() => onLocationSelect?.(item.id)}
+              aria-label={`Select ${item.place}, ${item.country}`}
+              aria-pressed={isSelected}
+            >
+              <span className="absolute inset-1 rounded-full" />
+              <span
+                className={cn(
+                  "pointer-events-none absolute left-1/2 bottom-1/2 flex -translate-x-1/2 flex-col-reverse items-center transition-opacity duration-500 ease-out motion-reduce:transition-none",
+                  isSelected ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <span
+                  className={cn(
+                    "h-9 w-px origin-bottom transition-transform duration-500 ease-out motion-reduce:transition-none",
+                    LABEL_LINE_CLASS,
+                    isSelected ? "scale-y-100" : "scale-y-0"
+                  )}
+                />
+                <span
+                  className={cn(
+                    "mb-0 flex items-baseline transition-all duration-500 ease-out motion-reduce:transition-none motion-reduce:delay-0",
+                    LABEL_CHIP_CLASS,
+                    isSelected
+                      ? "translate-y-0 scale-100 delay-200"
+                      : "translate-y-1 scale-95 delay-0"
+                  )}
+                >
+                  <span className="font-medium leading-none text-foreground">
+                    {item.place}
+                  </span>
+                  <span className="text-sm leading-none" aria-hidden="true">
+                    {item.flag}
+                  </span>
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }

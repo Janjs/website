@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { Globe } from "@/components/ui/globe";
+import { Globe, type GlobeLocation } from "@/components/ui/globe";
 import { cn } from "@/lib/utils";
 
-export type AboutGlobeItem = {
-  id: string;
+export type AboutGlobeItem = GlobeLocation & {
   quote: string;
-  location: [number, number];
-  label: string;
 };
 
 export type AboutGlobeEntryPart = {
@@ -32,15 +29,23 @@ export function AboutGlobeSection({
 }) {
   const defaultQuote = "Currently based in Amsterdam, the Netherlands, working in AI consultancy.";
   const defaultItem =
-    items.find((item) => item.id === "dutch-bank" || item.label.includes("Amsterdam")) ?? items[0];
-  const [activeIndex, setActiveIndex] = useState(0);
+    items.find((item) => item.id === "dutch-bank" || item.place.includes("Amsterdam")) ?? items[0];
+  const defaultIndex = Math.max(
+    0,
+    items.findIndex((item) => item.id === defaultItem.id)
+  );
+  const overviewLocation: [number, number] = [47, -50];
+  const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const [pinnedIndex, setPinnedIndex] = useState<number | null>(null);
   const [hasSpotlight, setHasSpotlight] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  const activeItem = items[activeIndex] ?? items[0];
-  const displayedItem = hasSpotlight ? activeItem : defaultItem;
-  const activeItemId = hasSpotlight ? activeItem?.id : undefined;
+  const activeItem = items[activeIndex] ?? defaultItem;
+  const spotlightFocusLocation =
+    activeItem.country === "United States" ? activeItem.location : overviewLocation;
+  const globeFocusLocation = hasSpotlight ? spotlightFocusLocation : overviewLocation;
+  const activeItemId = hasSpotlight ? activeItem.id : undefined;
+  const selectedLocationId = activeItem.id;
   const displayedQuote = hasSpotlight ? activeItem.quote : defaultQuote;
   const itemIndexById = new Map(items.map((item, index) => [item.id, index]));
 
@@ -50,11 +55,11 @@ export function AboutGlobeSection({
     setHasSpotlight(true);
   };
 
-  const clearSpotlight = () => {
+  const clearSpotlight = useCallback(() => {
     setPinnedIndex(null);
-    setActiveIndex(0);
+    setActiveIndex(defaultIndex);
     setHasSpotlight(false);
-  };
+  }, [defaultIndex]);
 
   const togglePinned = (index: number) => {
     if (pinnedIndex === index) {
@@ -74,7 +79,7 @@ export function AboutGlobeSection({
       return;
     }
 
-    setActiveIndex(0);
+    setActiveIndex(defaultIndex);
     setHasSpotlight(false);
   };
 
@@ -92,7 +97,7 @@ export function AboutGlobeSection({
     return () => {
       document.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, [pinnedIndex]);
+  }, [clearSpotlight, pinnedIndex]);
 
   return (
     <div
@@ -184,9 +189,29 @@ export function AboutGlobeSection({
         })}
       </div>
 
-      <div className="order-2 relative mt-4 h-[15rem] border-t pt-6 sm:mt-0 sm:h-auto sm:self-stretch sm:border-t-0 sm:pt-0">
+      <div
+        className="order-2 relative mt-4 h-[15rem] border-t pt-6 sm:mt-0 sm:h-auto sm:self-stretch sm:border-t-0 sm:pt-0"
+        onMouseLeave={reset}
+        onBlur={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            reset();
+          }
+        }}
+      >
         <div className="absolute -top-10 z-0 aspect-square w-[20rem] sm:-top-35 sm:w-full">
-          <Globe className="z-0" location={displayedItem.location} label={displayedItem.label} />
+          <Globe
+            className="z-0"
+            locations={items}
+            focusedLocation={globeFocusLocation}
+            selectedLocationId={selectedLocationId}
+            onLocationSelect={(itemId) => {
+              const itemIndex = itemIndexById.get(itemId);
+
+              if (itemIndex !== undefined) {
+                togglePinned(itemIndex);
+              }
+            }}
+          />
         </div>
 
         <blockquote className="pointer-events-none absolute bottom-0 right-0 z-20 w-full max-w-[19rem] rounded-xl bg-card px-4 py-3 text-sm leading-relaxed text-card-foreground shadow-sm ring-1 ring-foreground/10">
