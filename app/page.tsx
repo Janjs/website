@@ -31,6 +31,16 @@ const aboutItems: AboutGlobeItem[] = [
     flag: "🇪🇸",
   },
   {
+    id: "ajou",
+    quote:
+      "My semester at Ajou University in Suwon gave me a new academic and cultural perspective, and it is still one of the experiences that most expanded how I see the world.",
+    location: [37.2636, 127.0286],
+    spotlightLocation: [37.2636, 127.0286],
+    place: "Ajou University",
+    country: "South Korea",
+    flag: "🇰🇷",
+  },
+  {
     id: "trinity",
     quote:
       "Studying at Trinity pulled me deep into spatial computing and AR/VR, with mentors and professors connected to the top of the industry shaping how I think about interaction design.",
@@ -53,6 +63,7 @@ const aboutItems: AboutGlobeItem[] = [
     quote:
       "The Michigan medtech work centered on building AI chatbot platforms with Next.js, used by 50,000+ internal employees.",
     location: [44.3148, -85.6024],
+    spotlightLocation: [44.3148, -85.6024],
     place: "Michigan",
     country: "United States",
     flag: "🇺🇸",
@@ -71,7 +82,12 @@ const aboutItems: AboutGlobeItem[] = [
 const aboutEntries: AboutGlobeEntry[] = [
   {
     id: "upf",
-    parts: [{ text: "BSc Computer Engineering - UPF Barcelona", itemId: "upf" }],
+    parts: [
+      { text: "BSc Computer Engineering - ", itemId: "upf" },
+      { text: "UPF Barcelona,", itemId: "upf", className: "font-semibold" },
+      { text: " including a semester at ", itemId: "ajou" },
+      { text: "Ajou University", itemId: "ajou", className: "font-semibold" },
+    ],
   },
   {
     id: "internship",
@@ -85,18 +101,20 @@ const aboutEntries: AboutGlobeEntry[] = [
   {
     id: "trinity",
     parts: [
+      { text: "MSc Computer Science (AR/VR) - ", itemId: "trinity" },
       {
-        text: "MSc Computer Science (AR/VR) - Trinity College Dublin",
+        text: "Trinity College Dublin",
         itemId: "trinity",
+        className: "font-semibold",
       },
     ],
   },
   {
     id: "consulting",
     parts: [
-      { text: "4+ years consulting building AI web apps at " },
-      { text: "Dutch Bank", itemId: "dutch-bank", className: "font-semibold" },
-      { text: ", " },
+      { text: "4+ years consulting building AI web apps at ", itemId: "dutch-bank" },
+      { text: "Dutch Bank,", itemId: "dutch-bank", className: "font-semibold" },
+      { text: " " },
       { text: "US Medtech", itemId: "us-medtech", className: "font-semibold" },
       { text: ", and " },
       { text: "German Industrial Machinery", itemId: "german-machinery", className: "font-semibold" },

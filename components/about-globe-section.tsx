@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 export type AboutGlobeItem = GlobeLocation & {
   quote: string;
+  spotlightLocation?: [number, number];
 };
 
 export type AboutGlobeEntryPart = {
@@ -41,8 +42,7 @@ export function AboutGlobeSection({
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const activeItem = items[activeIndex] ?? defaultItem;
-  const spotlightFocusLocation =
-    activeItem.country === "United States" ? activeItem.location : overviewLocation;
+  const spotlightFocusLocation = activeItem.spotlightLocation ?? overviewLocation;
   const globeFocusLocation = hasSpotlight ? spotlightFocusLocation : overviewLocation;
   const activeItemId = hasSpotlight ? activeItem.id : undefined;
   const selectedLocationId = activeItem.id;
@@ -125,7 +125,7 @@ export function AboutGlobeSection({
             <p
               key={entry.id}
               className={cn(
-                "max-w-[38rem] text-[0.98rem] leading-[1.45] tracking-[-0.015em] text-foreground/92 transition duration-300 sm:text-[1.02rem]",
+                "max-w-[38rem] whitespace-pre-wrap text-[0.98rem] leading-[1.45] tracking-[-0.015em] text-foreground/92 transition duration-300 sm:text-[1.02rem]",
                 entryIsDimmed && !entryUsesInternalSpotlight && "opacity-25 blur-[1.4px]"
               )}
             >
