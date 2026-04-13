@@ -99,8 +99,8 @@ export function ProjectsExpandableList({ projects }: ProjectsExpandableListProps
       return () => window.cancelIdleCallback(idleCallbackId);
     }
 
-    const timeoutId = window.setTimeout(preloadScreenshots, 600);
-    return () => window.clearTimeout(timeoutId);
+    const timeoutId = globalThis.setTimeout(preloadScreenshots, 600);
+    return () => globalThis.clearTimeout(timeoutId);
   }, [projects]);
 
   const platformLabel = (kind: ProjectKind) =>

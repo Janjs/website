@@ -52,6 +52,7 @@ export function Highlighter({
     const element = elementRef.current
     let annotation: RoughAnnotation | null = null
     let resizeObserver: ResizeObserver | null = null
+    let handleReplay: (() => void) | null = null
 
     if (shouldShow && element) {
       const annotationConfig = {
@@ -75,9 +76,21 @@ export function Highlighter({
 
       resizeObserver.observe(element)
       resizeObserver.observe(document.body)
+
+      handleReplay = () => {
+        currentAnnotation.hide()
+        currentAnnotation.show()
+      }
+
+      element.addEventListener("mouseenter", handleReplay)
+      element.addEventListener("focus", handleReplay)
     }
 
     return () => {
+      if (element && handleReplay) {
+        element.removeEventListener("mouseenter", handleReplay)
+        element.removeEventListener("focus", handleReplay)
+      }
       annotation?.remove()
       if (resizeObserver) {
         resizeObserver.disconnect()
