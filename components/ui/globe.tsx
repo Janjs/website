@@ -126,10 +126,13 @@ export function Globe({
   const currentRotationRef = useRef(locationToAngles(focusedLocation));
   const dragStateRef = useRef<{
     pointerId: number;
+    pointerType: string;
     startX: number;
     startY: number;
     startPhi: number;
     startTheta: number;
+    isDirectionLocked: boolean;
+    isHorizontalDrag: boolean;
   } | null>(null);
   const timeRef = useRef(0);
   const [, setHoveredMarkerKey] = useState<string | null>(null);
@@ -262,13 +265,19 @@ export function Globe({
       return;
     }
 
-    canvas.setPointerCapture(event.pointerId);
+    if (event.pointerType !== "touch") {
+      canvas.setPointerCapture(event.pointerId);
+    }
+
     dragStateRef.current = {
       pointerId: event.pointerId,
+      pointerType: event.pointerType,
       startX: event.clientX,
       startY: event.clientY,
       startPhi: targetRotationRef.current.phi,
       startTheta: targetRotationRef.current.theta,
+      isDirectionLocked: false,
+      isHorizontalDrag: true,
     };
   };
 
@@ -281,6 +290,28 @@ export function Globe({
     }
 
     const deltaX = event.clientX - dragState.startX;
+    const deltaY = event.clientY - dragState.startY;
+
+    if (dragState.pointerType === "touch" && !dragState.isDirectionLocked) {
+      const movementThreshold = 6;
+
+      if (Math.abs(deltaX) < movementThreshold && Math.abs(deltaY) < movementThreshold) {
+        return;
+      }
+
+      dragState.isDirectionLocked = true;
+      dragState.isHorizontalDrag = Math.abs(deltaX) >= Math.abs(deltaY);
+
+      if (dragState.isHorizontalDrag) {
+        canvas.setPointerCapture(event.pointerId);
+      } else {
+        dragStateRef.current = null;
+      }
+    }
+
+    if (dragState.pointerType === "touch" && !dragState.isHorizontalDrag) {
+      return;
+    }
 
     targetRotationRef.current.phi = dragState.startPhi + deltaX * DRAG_SENSITIVITY;
     targetRotationRef.current.theta = dragState.startTheta;
@@ -294,7 +325,10 @@ export function Globe({
       return;
     }
 
-    canvas.releasePointerCapture(event.pointerId);
+    if (canvas.hasPointerCapture(event.pointerId)) {
+      canvas.releasePointerCapture(event.pointerId);
+    }
+
     dragStateRef.current = null;
   };
 
@@ -307,7 +341,7 @@ export function Globe({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerEnd}
         onPointerCancel={handlePointerEnd}
-        className="size-full cursor-grab touch-none opacity-0 transition-opacity duration-700 active:cursor-grabbing [contain:layout_paint_size]"
+        className="size-full cursor-grab touch-pan-y opacity-0 transition-opacity duration-700 active:cursor-grabbing [contain:layout_paint_size]"
       />
       <div className="pointer-events-none absolute inset-0 z-10">
         {uniqueLocations.map((item) => {
