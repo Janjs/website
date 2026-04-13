@@ -30,7 +30,7 @@ export function AboutGlobeSection({
   items: AboutGlobeItem[];
   entries: AboutGlobeEntry[];
 }) {
-  const defaultQuote = "Currently based in the Netherlands, working in AI consultancy.";
+  const defaultQuote = "Currently based in Amsterdam, the Netherlands, working in AI consultancy.";
   const defaultItem =
     items.find((item) => item.id === "dutch-bank" || item.label.includes("Amsterdam")) ?? items[0];
   const [activeIndex, setActiveIndex] = useState(0);
@@ -144,7 +144,7 @@ export function AboutGlobeSection({
           <Globe className="z-0" location={displayedItem.location} label={displayedItem.label} />
         </div>
 
-        <blockquote className="pointer-events-none absolute bottom-0 right-0 z-20 w-full max-w-[19rem] rounded-[1.55rem] border border-white/70 bg-white/58 px-4 py-3 text-sm leading-relaxed text-foreground shadow-[0_18px_48px_rgba(17,24,39,0.12)] backdrop-blur-xl dark:border-white/12 dark:bg-white/10 dark:shadow-[0_18px_48px_rgba(0,0,0,0.28)]">
+        <blockquote className="pointer-events-none absolute bottom-0 right-0 z-20 w-full max-w-[19rem] rounded-xl bg-card px-4 py-3 text-sm leading-relaxed text-card-foreground shadow-sm ring-1 ring-foreground/10">
           <p>
             <span aria-hidden="true">&ldquo;</span>
             {displayedQuote}

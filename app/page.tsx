@@ -15,7 +15,7 @@ const aboutItems: AboutGlobeItem[] = [
   {
     id: "upf",
     quote:
-      "UPF gave me the systems foundation that still shapes how I approach product engineering, architecture, and performance.",
+      "Barcelona is where I'm originally from. UPF gave me the systems foundation that still shapes how I approach product engineering, architecture, and performance.",
     location: [41.3874, 2.1686],
     label: "Barcelona, Spain",
   },
@@ -43,14 +43,14 @@ const aboutItems: AboutGlobeItem[] = [
   {
     id: "us-medtech",
     quote:
-      "The Michigan medtech work centered on AI chatbot platforms used by 50,000+ internal employees.",
+      "The Michigan medtech work centered on building AI chatbot platforms with Next.js, used by 50,000+ internal employees.",
     location: [44.3148, -85.6024],
     label: "Michigan, United States",
   },
   {
     id: "german-machinery",
     quote:
-      "The German industrial work focused on developing agentic systems with LLMs, RAG, and enterprise integrations.",
+      "The German industrial work focused on developing Next.js-based agentic systems with LLMs, RAG, and enterprise integrations.",
     location: [50.1109, 8.6821],
     label: "Frankfurt, Germany",
   },
