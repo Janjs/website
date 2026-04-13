@@ -26,11 +26,15 @@ const BASE_CONFIG: Omit<
 };
 
 const INTERPOLATION_FACTOR = 0.12;
+const FOCUS_BIAS = {
+  phi: (-20 * Math.PI) / 180,
+  theta: (-20 * Math.PI) / 180,
+} as const;
 
 function locationToAngles([latitude, longitude]: [number, number]) {
   return {
-    phi: ((-longitude - 90) * Math.PI) / 180,
-    theta: (latitude * Math.PI) / 180,
+    phi: ((-longitude - 90) * Math.PI) / 180 + FOCUS_BIAS.phi,
+    theta: (latitude * Math.PI) / 180 + FOCUS_BIAS.theta,
   };
 }
 
