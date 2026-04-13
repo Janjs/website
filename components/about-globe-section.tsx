@@ -97,7 +97,7 @@ export function AboutGlobeSection({
   return (
     <div
       ref={sectionRef}
-      className="grid gap-6 md:items-stretch md:grid-cols-[minmax(0,1fr)_minmax(16rem,21rem)] md:gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,23rem)]"
+      className="grid gap-6 sm:items-stretch sm:grid-cols-[minmax(0,1fr)_minmax(16rem,21rem)] sm:gap-8"
     >
       <div
         className="order-1 space-y-4 sm:space-y-5"
@@ -184,8 +184,8 @@ export function AboutGlobeSection({
         })}
       </div>
 
-      <div className="order-2 relative mt-4 h-[17.5rem] border-t pt-6 sm:h-[19.5rem] sm:pt-8 md:mt-0 md:h-auto md:self-stretch md:border-t-0 md:pt-0">
-        <div className="absolute -top-6 z-0 aspect-square w-[86%] sm:-top-8 sm:w-[78%] md:-top-35 md:w-full">
+      <div className="order-2 relative mt-4 h-[15rem] border-t pt-6 sm:mt-0 sm:h-auto sm:self-stretch sm:border-t-0 sm:pt-0">
+        <div className="absolute -top-10 z-0 aspect-square w-[20rem] sm:-top-35 sm:w-full">
           <Globe className="z-0" location={displayedItem.location} label={displayedItem.label} />
         </div>
 
