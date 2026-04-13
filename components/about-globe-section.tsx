@@ -1,6 +1,5 @@
 "use client";
 
-import { MapPin } from "lucide-react";
 import { useState } from "react";
 
 import { Globe } from "@/components/ui/globe";
@@ -31,11 +30,16 @@ export function AboutGlobeSection({
   items: AboutGlobeItem[];
   entries: AboutGlobeEntry[];
 }) {
+  const defaultQuote = "Currently based in the Netherlands, working in AI consultancy.";
+  const defaultItem =
+    items.find((item) => item.id === "dutch-bank" || item.label.includes("Amsterdam")) ?? items[0];
   const [activeIndex, setActiveIndex] = useState(0);
   const [hasSpotlight, setHasSpotlight] = useState(false);
 
   const activeItem = items[activeIndex] ?? items[0];
-  const activeItemId = activeItem?.id;
+  const displayedItem = hasSpotlight ? activeItem : defaultItem;
+  const activeItemId = hasSpotlight ? activeItem?.id : undefined;
+  const displayedQuote = hasSpotlight ? activeItem.quote : defaultQuote;
   const itemIndexById = new Map(items.map((item, index) => [item.id, index]));
 
   const activate = (index: number) => {
@@ -137,13 +141,13 @@ export function AboutGlobeSection({
 
       <div className="relative self-stretch">
         <div className="absolute -top-35 z-0 aspect-square w-full">
-          <Globe className="z-0" location={activeItem.location} label={activeItem.label} />
+          <Globe className="z-0" location={displayedItem.location} label={displayedItem.label} />
         </div>
 
         <blockquote className="pointer-events-none absolute bottom-0 right-0 z-20 w-full max-w-[19rem] rounded-[1.55rem] border border-white/70 bg-white/58 px-4 py-3 text-sm leading-relaxed text-foreground shadow-[0_18px_48px_rgba(17,24,39,0.12)] backdrop-blur-xl dark:border-white/12 dark:bg-white/10 dark:shadow-[0_18px_48px_rgba(0,0,0,0.28)]">
           <p>
             <span aria-hidden="true">&ldquo;</span>
-            {activeItem.quote}
+            {displayedQuote}
             <span aria-hidden="true">&rdquo;</span>
           </p>
         </blockquote>

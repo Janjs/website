@@ -29,30 +29,30 @@ const aboutItems: AboutGlobeItem[] = [
   {
     id: "trinity",
     quote:
-      "The work at Trinity pulled me deep into spatial computing and AR/VR, and it still influences how I think about interaction design.",
+      "Studying at Trinity pulled me deep into spatial computing and AR/VR, with mentors and professors connected to the top of the industry shaping how I think about interaction design.",
     location: [53.3498, -6.2603],
     label: "Dublin, Ireland",
   },
   {
     id: "dutch-bank",
     quote:
-      "The Dutch bank work taught me how to ship AI in a regulated environment without compromising reliability, privacy, or maintainability.",
+      "The Dutch bank work had me designing and building high-availability backend systems handling 1,000+ QPS across Kotlin, Java, and Azure.",
     location: [52.3676, 4.9041],
     label: "Amsterdam, Netherlands",
   },
   {
     id: "us-medtech",
     quote:
-      "The US medtech work sharpened how I design trustworthy AI experiences where clarity, consistency, and human stakes all matter.",
-    location: [39.8283, -98.5795],
-    label: "United States",
+      "The Michigan medtech work centered on AI chatbot platforms used by 50,000+ internal employees.",
+    location: [44.3148, -85.6024],
+    label: "Michigan, United States",
   },
   {
     id: "german-machinery",
     quote:
-      "The German industrial machinery projects pushed me toward practical AI systems that fit real operational constraints instead of staying at the demo stage.",
-    location: [51.1657, 10.4515],
-    label: "Germany",
+      "The German industrial work focused on developing agentic systems with LLMs, RAG, and enterprise integrations.",
+    location: [50.1109, 8.6821],
+    label: "Frankfurt, Germany",
   },
 ];
 
