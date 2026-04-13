@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Globe } from "@/components/ui/globe";
 import { cn } from "@/lib/utils";
@@ -34,7 +34,9 @@ export function AboutGlobeSection({
   const defaultItem =
     items.find((item) => item.id === "dutch-bank" || item.label.includes("Amsterdam")) ?? items[0];
   const [activeIndex, setActiveIndex] = useState(0);
+  const [pinnedIndex, setPinnedIndex] = useState<number | null>(null);
   const [hasSpotlight, setHasSpotlight] = useState(false);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const activeItem = items[activeIndex] ?? items[0];
   const displayedItem = hasSpotlight ? activeItem : defaultItem;
@@ -43,19 +45,62 @@ export function AboutGlobeSection({
   const itemIndexById = new Map(items.map((item, index) => [item.id, index]));
 
   const activate = (index: number) => {
+    if (pinnedIndex !== null) return;
+    setActiveIndex(index);
+    setHasSpotlight(true);
+  };
+
+  const clearSpotlight = () => {
+    setPinnedIndex(null);
+    setActiveIndex(0);
+    setHasSpotlight(false);
+  };
+
+  const togglePinned = (index: number) => {
+    if (pinnedIndex === index) {
+      clearSpotlight();
+      return;
+    }
+
+    setPinnedIndex(index);
     setActiveIndex(index);
     setHasSpotlight(true);
   };
 
   const reset = () => {
+    if (pinnedIndex !== null) {
+      setActiveIndex(pinnedIndex);
+      setHasSpotlight(true);
+      return;
+    }
+
     setActiveIndex(0);
     setHasSpotlight(false);
   };
 
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (pinnedIndex === null) return;
+      const target = event.target as Node | null;
+      if (!target) return;
+      if (!sectionRef.current?.contains(target)) {
+        clearSpotlight();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, [pinnedIndex]);
+
   return (
-    <div className="grid gap-6 md:items-stretch md:grid-cols-[minmax(0,1fr)_minmax(16rem,21rem)] md:gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,23rem)]">
+    <div
+      ref={sectionRef}
+      className="grid gap-6 md:items-stretch md:grid-cols-[minmax(0,1fr)_minmax(16rem,21rem)] md:gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,23rem)]"
+    >
       <div
-        className="space-y-4 sm:space-y-5"
+        className="order-1 space-y-4 sm:space-y-5"
         onMouseLeave={reset}
         onBlur={(event) => {
           if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
@@ -127,7 +172,7 @@ export function AboutGlobeSection({
                     )}
                     onMouseEnter={() => activate(itemIndex)}
                     onFocus={() => activate(itemIndex)}
-                    onClick={() => activate(itemIndex)}
+                    onClick={() => togglePinned(itemIndex)}
                     aria-pressed={isActive}
                   >
                     {part.text}
@@ -139,8 +184,8 @@ export function AboutGlobeSection({
         })}
       </div>
 
-      <div className="relative self-stretch">
-        <div className="absolute -top-35 z-0 aspect-square w-full">
+      <div className="order-2 relative mt-4 h-[17.5rem] border-t pt-6 sm:h-[19.5rem] sm:pt-8 md:mt-0 md:h-auto md:self-stretch md:border-t-0 md:pt-0">
+        <div className="absolute -top-6 z-0 aspect-square w-[86%] sm:-top-8 sm:w-[78%] md:-top-35 md:w-full">
           <Globe className="z-0" location={displayedItem.location} label={displayedItem.label} />
         </div>
 
