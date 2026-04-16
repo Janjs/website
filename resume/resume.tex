@@ -1,0 +1,225 @@
+%-------------------------
+% Resume in Latex
+% Author : Jake Gutierrez
+% Based off of: https://github.com/sb2nov/resume
+% License : MIT
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+\usepackage{fontawesome5}
+
+
+%----------FONT OPTIONS----------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+%----------HEADING----------
+\begin{tabular*}{\textwidth}{l@{\extracolsep{\fill}}r}
+  \textbf{\Huge \scshape Jan Jiménez Serra} & \large {\normalsize \faGlobe}\ \href{https://janjs.dev}{\underline{janjs.dev}} \\
+\end{tabular*}
+\vspace{6pt}
+
+\noindent
+\begin{tabular*}{\textwidth}{@{}c@{\extracolsep{\fill}}c@{}}
+  \footnotesize
+  \faGithub\ \href{https://github.com/janjs}{\underline{github.com/janjs}}
+  \hspace{0.5em} $|$ \hspace{0.5em}
+  \faPhone\ +34 684 22 55 70
+  \hspace{0.5em} $|$ \hspace{0.5em}
+  \faEnvelope\ \href{mailto:jan.jime.serra@gmail.com}{\underline{jan.jime.serra@gmail.com}}
+  \hspace{0.5em} $|$ \hspace{0.5em}
+  \faMapMarker\ Netherlands (Originally from Barcelona) \\
+\end{tabular*}
+
+
+
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {M.Sc. in Computer Science}{Sep. 2020 -- Oct. 2021}
+      {Trinity College Dublin}{Dublin, Ireland}
+      \resumeItemListStart
+        \resumeItem{Specialized in AR/VR, Machine Learning, and Computer Graphics.}
+      \resumeItemListEnd
+    \resumeSubheading
+      {Bachelor’s in Computer Engineering and Information Systems}{Sep. 2016 -- Dec. 2019}
+      {Universitat Pompeu Fabra}{Barcelona, Spain}
+    \resumeSubheading
+      {Study Abroad, Ajou University}{2017}
+      {Ajou University}{Suwon, South Korea}
+      \resumeItemListStart
+        \resumeItem{Studied a semester at \emph{Ajou University}.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Full-Stack Software Engineer}{October 2021 - Currently}
+      {Accenture Netherlands}{Amsterdam (Netherlands)}
+      \resumeItemListStart
+      \resumeItem{Worked in one of the largest banks in the Netherlands, where we migrated user accounts from an outdated system to a new, cloud-based application built in AngularJS and Kotlin with Spring.}
+      \resumeItem{Gained DevOps knowledge by: implementing CI/CD pipelines; automating build, test, monitoring and logging to ensure system reliability and performance; and managing a microservices infrastructure.}
+      \resumeItem{Internal project to research the viability of hosting websites on a satellite, built a front-end web app with interactive 3D models in ThreeJS.}
+    \resumeItemListEnd
+    
+    \resumeSubheading
+      {Software Engineer}{April 2018 -- Dec. 2019}
+      {NexoTech}{Mataró, Barcelona (Spain)}
+      \resumeItemListStart
+        \resumeItem{Led project about designing and building of a full-stack web application build in ReactJS and Java Spring for counting the amount of people in a building with IoT and Deep Learning implementations.}
+        \resumeItem{Implemented a Machine Learning model with Keras and Python that recognizes gender and age. Used AWS Rekognition in production for better speed and accuracy.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Freelance Python Teacher}{February 2021}
+      {Projecte SocialNEET}{Barcelona (Spain)}
+      \resumeItemListStart
+      \resumeItem{Taught beginner level Python and Machine Learning for a governmental learning project. }
+    \resumeItemListEnd
+    \resumeSubHeadingListEnd
+      
+      
+% -----------Multiple Positions Heading-----------
+%    \resumeSubSubheading
+%     {Software Engineer I}{Oct 2014 - Sep 2016}
+%     \resumeItemListStart
+%        \resumeItem{Apache Beam}
+%          {Apache Beam is a unified model for defining both batch and streaming data-parallel processing pipelines}
+%     \resumeItemListEnd
+%    \resumeSubHeadingListEnd
+%-------------------------------------------
+
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+      \resumeProjectHeading
+          {\textbf{3D Copy \& Paste} $|$ \emph{ARKit, Swift, Python, Blender}}{April 2021 - September 2021}
+          \resumeItemListStart
+            \resumeItem{Developed an iOS app that obtains a 3D mesh using LiDAR from a 4th Gen iPad Pro, and seamlessly sends the mesh to a 3D modeling program (Blender) by pointing the camera to it.}
+            \resumeItem{Blender Add-on written in Python that retrieves the model and positions it at the centroid between the camera picture and the computer screen.}
+          \resumeItemListEnd
+
+          More Web and Mobile applications in an abundance of programming language, frameworks and libraries can be found at: \vspace{1pt}
+    \href{https://github.com/janjs}{\underline{github.com/janjs}}
+    \resumeSubHeadingListEnd
+
+
+
+%
+%-----------PROGRAMMING SKILLS-----------
+\section{Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \item \small{
+      \textbf{Programming Languages}: \textbf{Java} · \textbf{Kotlin} · \textbf{Python} · \textbf{JavaScript/TypeScript}. \\
+      \textbf{Frameworks}: React JS · Angular JS · Spring · Three JS · React Native · Django · ARKit · iOS UIKit · OpenGL. \\
+      \textbf{Machine Learning}: PyTorch · AWS/GCP machine learning tools (Rekognition, Firebase ML). \\
+      \textbf{Database Management}: SQL (MySQL/Oracle/PostgreSQL) · NoSQL (CosmosDB) · Firebase. \\
+      \textbf{Developer Tools}: Git · IntelliJ · VS Code · Firebase · XCode · Azure DevOps. \\
+      \textbf{Web Markup Languages}: HTML/CSS. \\
+      \textbf{Others}: DevOps · OOP · AOP · Computer Graphics (C++) · Machine Learning.
+    }
+    \item \small{ \textbf{Spoken Languages}: English (\emph{Level C1 - Cambridge English: Advanced}) · Spanish (\emph{Native}) · Catalan (\emph{Native}). }
+ \end{itemize}
+
+
+%-------------------------------------------
+\end{document}
